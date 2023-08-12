@@ -49,8 +49,8 @@ def level_crawler(input_url):
                     links_extern.add(href)
                 if current_url_domain in href and href not in links_intern:
                     print("Intern - {}".format(href))
-                    global content 
-                    content = content + content_collect(href) + '\n'
+                    # global content 
+                    # content = content + content_collect(href) + '\n'
                     links_intern.add(href)
                     temp_urls.add(href)
     return temp_urls
@@ -70,8 +70,7 @@ if(depth == 0):
 
 elif(depth == 1):
     level_crawler(input_url)
-    print()
-    print(content)
+
 
 else:
 	# We have used a BFS approach
@@ -87,3 +86,22 @@ else:
 			urls = level_crawler(url)
 			for i in urls:
 				queue.append(i)
+
+
+for link in links_intern:
+    if "machine" in link:
+        content += content_collect(link) + '\n\n\n'
+    #print(link)
+
+print(content)
+
+
+'''
+chatgpt prompt template.
+
+below data is related to {{topics}}. please go through the follwing data and summarize
+it. remove repetetive and unrelevant content. make sure the length is around {{req_length}}.
+make the summary concise, to the point and as simple as possible. take your time.
+
+{{content}}
+'''
