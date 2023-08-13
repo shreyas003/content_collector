@@ -5,10 +5,19 @@ import requests
 from urllib.request import urlparse
 
 
+#req_length = input(enter required length: ) // optional
+#input_url = input(enter source url: )
+#depth = int(input(enter depth of bfs: ))
+
+
+#change collect content functions as para(link, keys):
+#if any(keys) in link: then exec
+
 # Set for storing urls with same domain
 links_intern = set()
 input_url = "https://www.geeksforgeeks.org/machine-learning/"
-depth = 1
+depth = int(input("enter depth of bfs: "))
+keywords = input("enter keywords: ").split(',')
 
 # Set for storing urls with different domain
 links_extern = set()
@@ -58,10 +67,14 @@ def level_crawler(input_url):
 def content_collect(link):
     temp = ""
     bs = BeautifulSoup(requests.get(link).content, "html.parser")
+    count = 0
 
     for para in bs.findAll('p'):
         text = para.getText()
         temp = temp + text
+        count += 1
+        if(count==2):
+            break
 
     return temp 
 
@@ -89,12 +102,30 @@ else:
 
 
 for link in links_intern:
-    if "machine" in link:
-        content += content_collect(link) + '\n\n\n'
-    #print(link)
+    count = 0
+    for word in keywords:
+        if word in link:
+            count+=1
+            content += content_collect(link) + '\n'
+            break
+    if(count==3):
+        break
+
 
 print(content)
 
+
+'''
+for link in links_intern:
+    count = 0
+    for word in keywords:
+        if word in link:
+            count+=1
+            content += content_collect(link) + '\n'
+            break
+    if(count==3):
+        break
+'''
 
 '''
 chatgpt prompt template.
