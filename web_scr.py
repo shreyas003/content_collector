@@ -1,6 +1,6 @@
 # Import libraries
 from urllib.request import urljoin
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
 import requests
 from urllib.request import urlparse
 
@@ -31,7 +31,8 @@ def level_crawler(input_url):
     current_url_domain = urlparse(input_url).netloc
 
     # Creates beautiful soup object to extract html tags # used lxml before
-    beautiful_soup_object = BeautifulSoup(requests.get(input_url).content, "html.parser") 
+    only_a = SoupStrainer("a")
+    beautiful_soup_object = BeautifulSoup(requests.get(input_url).text, "lxml", parse_only=only_a) 
 
 
     # Access all anchor tags from input
@@ -39,7 +40,6 @@ def level_crawler(input_url):
     # and external categories
 
     for anchor in beautiful_soup_object.findAll('a'):
-        #print(beautiful_soup_object.findAll('a'))
         href = anchor.attrs.get("href")
         if(href != "" or href != None):
             href = urljoin(input_url, href)
@@ -58,15 +58,15 @@ def level_crawler(input_url):
                     links_extern.add(href)
                 if current_url_domain in href and href not in links_intern:
                     print("Intern - {}".format(href))
-                    # global content 
-                    # content = content + content_collect(href) + '\n'
+                    
                     links_intern.add(href)
                     temp_urls.add(href)
     return temp_urls
 
 def content_collect(link):
     temp = ""
-    bs = BeautifulSoup(requests.get(link).content, "html.parser")
+    only_p = SoupStrainer("p")
+    bs = BeautifulSoup(requests.get(link).text, "lxml",parse_only=only_p)
     count = 0
 
     for para in bs.findAll('p'):
@@ -101,7 +101,8 @@ else:
 				queue.append(i)
 
 
-for link in links_intern:
+for link in list(links_intern):
+
     count = 0
     for word in keywords:
         if word in link:
@@ -115,17 +116,6 @@ for link in links_intern:
 print(content)
 
 
-'''
-for link in links_intern:
-    count = 0
-    for word in keywords:
-        if word in link:
-            count+=1
-            content += content_collect(link) + '\n'
-            break
-    if(count==3):
-        break
-'''
 
 '''
 chatgpt prompt template.
