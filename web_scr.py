@@ -9,15 +9,12 @@ from urllib.request import urlparse
 #input_url = input(enter source url: )
 #depth = int(input(enter depth of bfs: ))
 
-
-#change collect content functions as para(link, keys):
-#if any(keys) in link: then exec
-
 # Set for storing urls with same domain
 links_intern = set()
 input_url = "https://www.geeksforgeeks.org/machine-learning/"
 depth = int(input("enter depth of bfs: "))
 keywords = input("enter keywords: ").split(',')
+req_length = input("enter required length: ")
 
 # Set for storing urls with different domain
 links_extern = set()
@@ -77,6 +74,12 @@ def content_collect(link):
 
     return temp 
 
+def gen_prompt(keywords,req_length):
+    prompt = '''Please summarize below text. Remove repetitive and irrelevant data.
+    make sure length is around {req_length}. Use {keywords} as reference. text begins now:'''
+    print(prompt)
+    return
+
 if(depth == 0):
 	print("Intern - {}".format(input_url))
 
@@ -111,18 +114,5 @@ for link in list(links_intern):
     if(count==3):
         break
 
-
+gen_prompt(keywords, req_length)
 print(content)
-
-
-
-
-'''
-chatgpt prompt template.
-
-below data is related to {{topics}}. please go through the follwing data and summarize
-it. remove repetetive and unrelevant content. make sure the length is around {{req_length}}.
-make the summary concise, to the point and as simple as possible. take your time.
-
-{{content}}
-'''
