@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 import requests
 from urllib.request import urlparse
 
-
+#NOTE: USE SOUPSTRAINER WITH BS4. IMPORVES SPEED.
 #req_length = input(enter required length: ) // optional
 #input_url = input(enter source url: )
 #depth = int(input(enter depth of bfs: ))
@@ -31,8 +31,12 @@ def level_crawler(input_url):
     current_url_domain = urlparse(input_url).netloc
 
     # Creates beautiful soup object to extract html tags # used lxml before
+#<<<<<<< test
     only_a = SoupStrainer("a")
     beautiful_soup_object = BeautifulSoup(requests.get(input_url).text, "lxml", parse_only=only_a) 
+#=======
+    #beautiful_soup_object = BeautifulSoup(requests.get(input_url).text, "html.parser") 
+#>>>>>>> main
 
 
     # Access all anchor tags from input
@@ -65,8 +69,12 @@ def level_crawler(input_url):
 
 def content_collect(link):
     temp = ""
+#<<<<<<< test
     only_p = SoupStrainer("p")
     bs = BeautifulSoup(requests.get(link).text, "lxml",parse_only=only_p)
+#=======
+    #bs = BeautifulSoup(requests.get(link).text, "html.parser")
+#>>>>>>> main
     count = 0
 
     for para in bs.findAll('p'):
@@ -115,6 +123,7 @@ for link in list(links_intern):
 
 print(content)
 
+#if i havent please remind me to use soupStrainer along beautifulSoup to improve parsing speed
 
 
 '''
