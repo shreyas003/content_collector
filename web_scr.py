@@ -23,7 +23,7 @@ content = ""
 
 
 # Method for crawling a url at next level
-def level_crawler(input_url):
+def level_url_crawler(input_url):
     temp_urls = set()
     current_url_domain = urlparse(input_url).netloc
 
@@ -84,7 +84,7 @@ if(depth == 0):
 	print("Intern - {}".format(input_url))
 
 elif(depth == 1):
-    level_crawler(input_url)
+    level_url_crawler(input_url)
 
 
 else:
@@ -98,7 +98,7 @@ else:
 	for j in range(depth):
 		for count in range(len(queue)):
 			url = queue.pop(0)
-			urls = level_crawler(url)
+			urls = level_url_crawler(url)
 			for i in urls:
 				queue.append(i)
 
